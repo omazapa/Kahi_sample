@@ -46,6 +46,36 @@ class Kahi_minciencias_sample(KahiBase):
             self.cols_in[key] = self.db_in[value]
         self.verbose = self.config["minciencias_sample"]["verbose"] if "verbose" in self.config["minciencias_sample"] else 1
 
+    def process_authors(self):
+        """
+        Process authors given the COD_RH in the workflow configuration.
+        All the works of the author are saved in the output database.
+        """
+        if "authors" in self.config["minciencias_sample"] and self.config["minciencias_sample"]["authors"]:
+            author_ids = self.config["minciencias_sample"]["authors"]
+            if self.verbose > 0:
+                print("INFO: Processing authors: ", len(author_ids))
+            for author_id in author_ids:
+                if self.verbose > 0:
+                    print(
+                        f"INFO: Found {self.cols_in["gruplac_production"].count_documents({'id_persona_pd': author_id})} in db {self.db_in.name} collection {self.cols_in["gruplac_production"].name} for id   {author_id}")
+                works = self.cols_in["gruplac_production"].find({"id_persona_pd": author_id})
+                Parallel(n_jobs=self.num_jobs, backend="threading", verbose=10)(
+                    delayed(self.process_one_work)(work) for work in works)
+
+    def process_one_work(self, work):
+        """
+        Method to process one work and save it in the output database.
+        Required for parallel processing.
+        """
+        work_id = {"id_producto_pd": work["id_producto_pd"]}
+        if self.cols_out["gruplac_production"].count_documents(work_id) == 0:
+            self.cols_out["gruplac_production"].insert_one(work)
+        else:
+            if self.verbose > 2:
+                print(
+                    f"INFO: Work  {work_id} already exists in db {self.db_out.name} collection {self.cols_out["gruplac_production"].name} ")
+
     def process_products(self):
         """
         process products given the COD_RH and COD_PRODUCTO in the workflow configuration.
@@ -73,6 +103,24 @@ class Kahi_minciencias_sample(KahiBase):
                 print(f"INFO: Found {found} works for product {product_id.pattern}")
             print(f"INFO: Found {total_found} works in total")
 
+    def process_groups(self):
+        """
+        Process groups given the COD_GRUPO in the workflow configuration.
+        """
+        if "groups" in self.config["minciencias_sample"] and self.config["minciencias_sample"]["groups"]:
+            group_ids = self.config["minciencias_sample"]["groups"]
+            if self.verbose > 0:
+                print("INFO: Processing groups: ", len(group_ids))
+            for group_id in group_ids:
+                if self.verbose > 0:
+                    print(
+                        f"INFO: Found {self.cols_in["gruplac_production"].count_documents({'cod_grupo_gr': group_id})} in db {self.db_in.name} collection {self.cols_in["gruplac_production"].name} for id   {group_id}")
+                works = self.cols_in["gruplac_production"].find({"cod_grupo_gr": group_id})
+                Parallel(n_jobs=self.num_jobs, backend="threading", verbose=10)(
+                    delayed(self.process_one_work)(work) for work in works)
+
     def run(self):
+        self.process_authors()
         self.process_products()
+        self.process_groups()
         # return 0
