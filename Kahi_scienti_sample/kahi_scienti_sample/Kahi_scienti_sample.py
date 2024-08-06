@@ -6,7 +6,7 @@ from joblib import Parallel, delayed
 class Kahi_scienti_sample(KahiBase):
     """
     Class to process the scienti database and extract works samples based on different criteria.
-    With this class you can extract works based on authors, products, types, groups, institutions, 
+    With this class you can extract works based on authors, products, types, groups, institutions,
     categories, custom queries and custom pipelines.
 
     """
@@ -107,7 +107,7 @@ class Kahi_scienti_sample(KahiBase):
         """
         Method to process types given the types in the workflow configuration.
         An example of scienti type if for example the code 111 that means "Artículo en revista indexada".
-        In the workflow configuration you can specify the types to process and it will save in the output 
+        In the workflow configuration you can specify the types to process and it will save in the output
         database all the works that match the type.
         """
         if "types" in self.config["scienti_sample"] and self.config["scienti_sample"]["types"]:
