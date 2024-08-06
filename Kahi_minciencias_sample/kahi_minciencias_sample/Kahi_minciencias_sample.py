@@ -118,9 +118,56 @@ class Kahi_minciencias_sample(KahiBase):
                 works = self.cols_in["gruplac_production"].find({"cod_grupo_gr": group_id})
                 Parallel(n_jobs=self.num_jobs, backend="threading", verbose=10)(
                     delayed(self.process_one_work)(work) for work in works)
-
+    def process_categories(self):
+        """
+        Process categories given the COD_CATEGORY in the workflow configuration.
+        """
+        if "categories" in self.config["minciencias_sample"] and self.config["minciencias_sample"]["categories"]:
+            category_ids = []
+            for cat in self.config["minciencias_sample"]["categories"]:
+                regex = re.compile(cat)
+                category_ids.append(regex)
+            if self.verbose > 0:
+                print("INFO: Processing categories: ", len(category_ids))
+            for category_id in category_ids:
+                if self.verbose > 0:
+                    print(
+                        f"INFO: Found {self.cols_in["gruplac_production"].count_documents({'id_tipo_pd_med': category_id})} in db {self.db_in.name} collection {self.cols_in["gruplac_production"].name} for id   {category_id.pattern}")
+                works = self.cols_in["gruplac_production"].find({"id_tipo_pd_med": category_id})
+                Parallel(n_jobs=self.num_jobs, backend="threading", verbose=10)(
+                    delayed(self.process_one_work)(work) for work in works)
+    def process_custom_queries(self):
+        """
+        Process custom queries in the workflow configuration.
+        """
+        if "custom_queries" in self.config["minciencias_sample"] and self.config["minciencias_sample"]["custom_queries"]:
+            queries = self.config["minciencias_sample"]["custom_queries"]
+            if self.verbose > 0:
+                print("INFO: Processing custom queries: ", len(queries))
+            for query in queries:
+                if self.verbose > 0:
+                    print(
+                        f"INFO: Found {self.cols_in["gruplac_production"].count_documents(query)} in db {self.db_in.name} collection {self.cols_in["gruplac_production"].name} for query   {query}")
+                works = self.cols_in["gruplac_production"].find(query)
+                Parallel(n_jobs=self.num_jobs, backend="threading", verbose=10)(
+                    delayed(self.process_one_work)(work) for work in works)
+    def process_custom_pipelines(self):
+        """
+        Process custom pipelines in the workflow configuration.
+        """
+        if "custom_pipelines" in self.config["minciencias_sample"] and self.config["minciencias_sample"]["custom_pipelines"]:
+            pipelines = self.config["minciencias_sample"]["custom_pipelines"]
+            if self.verbose > 0:
+                print("INFO: Processing custom pipelines: ", len(pipelines))
+            for pipeline in pipelines:
+                works = self.cols_in["gruplac_production"].aggregate(pipeline)
+                Parallel(n_jobs=self.num_jobs, backend="threading", verbose=10)(
+                    delayed(self.process_one_work)(work) for work in works)
     def run(self):
         self.process_authors()
         self.process_products()
         self.process_groups()
+        self.process_categories()
+        self.process_custom_queries()
+        self.process_custom_pipelines()
         # return 0
