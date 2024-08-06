@@ -6,7 +6,7 @@ from joblib import Parallel, delayed
 class Kahi_openalex_sample(KahiBase):
     """
     Class to process the openalex database and extract works samples based on different criteria.
-    With this class you can extract works based on authors, products, types, institutions custom 
+    With this class you can extract works based on authors, products, types, institutions custom
     queries and custom pipelines.
 
     """
@@ -107,10 +107,10 @@ class Kahi_openalex_sample(KahiBase):
     def process_types(self):
         """
         Method to process types given the types in the workflow configuration.
-        type: 'article' # options are : [( 'article', 'book', 'book-chapter', 'dataset', 'dissertation', 'editorial', 
+        type: 'article' # options are : [( 'article', 'book', 'book-chapter', 'dataset', 'dissertation', 'editorial',
                                          # 'erratum', 'letter', 'other', 'paratext', 'peer-review', 'preprint', 'reference-entry', 'report', 'review', 'standard')]
-        type_crossref: 'journal-article' # options are: [ 'book', 'book-chapter', 'book-part', 'book-series', 'book-set', 'component', 'dataset', 'dissertation', 'edited-book', 
-                                                  #       'journal', 'journal-article', 'journal-issue', 'journal-volume', 'monograph', 'other', 'peer-review', 'posted-content', 
+        type_crossref: 'journal-article' # options are: [ 'book', 'book-chapter', 'book-part', 'book-series', 'book-set', 'component', 'dataset', 'dissertation', 'edited-book',
+                                                  #       'journal', 'journal-article', 'journal-issue', 'journal-volume', 'monograph', 'other', 'peer-review', 'posted-content',
                                                   #        'proceedings', 'proceedings-article', 'proceedings-series', 'reference-book', 'reference-entry', 'report', 'report-series', 'standard']
         In the workflow configuration you can specify the types to process and it will save in the output.
         database all the works that match the type.
@@ -231,7 +231,7 @@ class Kahi_openalex_sample(KahiBase):
         Method to post process concepts and save them in the output database.
         """
         # concepts
-        print(f"INFO: processing concepts ")
+        print("INFO: processing concepts ")
         pipeline = [
             {"$match": {}},
             {"$out": {"db": self.db_out.name, "coll": self.database_collection_concepts}}
@@ -243,7 +243,7 @@ class Kahi_openalex_sample(KahiBase):
         Method to post process funders and save them in the output database.
         """
         # funders
-        print(f"INFO: processing funders ")
+        print("INFO: processing funders ")
         pipeline = [
             {"$match": {}},
             {"$out": {"db": self.db_out.name, "coll": self.database_collection_funders}}
@@ -255,7 +255,7 @@ class Kahi_openalex_sample(KahiBase):
         Method to post process institutions and save them in the output database.
         """
         # institutions
-        print(f"INFO: processing institutions ")
+        print("INFO: processing institutions ")
         pipeline = [
             {"$match": {}},
             {"$out": {"db": self.db_out.name,
@@ -268,7 +268,7 @@ class Kahi_openalex_sample(KahiBase):
         Method to post process publishers and save them in the output database.
         """
         # publishers
-        print(f"INFO: processing publishers ")
+        print("INFO: processing publishers ")
         pipeline = [
             {"$match": {}},
             {"$out": {"db": self.db_out.name, "coll": self.database_collection_publishers}}
@@ -280,7 +280,7 @@ class Kahi_openalex_sample(KahiBase):
         Method to post process sources and save them in the output database.
         """
         # sources
-        print(f"INFO: processing sources ")
+        print("INFO: processing sources ")
         pipeline = [
             {"$match": {}},
             {"$out": {"db": self.db_out.name, "coll": self.database_collection_sources}}
