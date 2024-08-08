@@ -1,6 +1,6 @@
 <center><img src="https://raw.githubusercontent.com/colav/colav.github.io/master/img/Logo.png"/></center>
 
-# Kahi scienti plugin 
+# Kahi scholar plugin 
 Sample data generation for scholar database
 
 # Description
