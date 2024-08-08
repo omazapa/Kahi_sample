@@ -45,12 +45,9 @@ workflow:
       - "RuclEJkAAAAJ" # Claudia Marcela Velez
       - "HcAnZ0MAAAAJ" # Gabriel Jaime Velez Cuartas
     products:
-      - cid: 'T5emQzegQC4J'
-        doi: 'https://doi.org/10.1103/physrevd.79.013011' # Radiative seesaw model:..
-      - cid: 'T8NdyUKnbCoJ'
-        doi: 'https://doi.org/10.1186/s12961-018-0325-x' # Addressing overuse of health..
-      - cid: 'oYypzOZJZsEJ'
-        doi: 'https://doi.org/10.3145/epi.2016.ene.05' # Regional and global science:..
+      - cid: 'T5emQzegQC4J' # Radiative seesaw model:..
+      - doi: 'https://doi.org/10.1186/s12961-018-0325-x' # Addressing overuse of health..
+      - cid: 'oYypzOZJZsEJ' # Regional and global science:..
     types:
       - 'article'
       - 'book'
