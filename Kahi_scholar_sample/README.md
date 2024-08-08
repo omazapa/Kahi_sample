@@ -36,7 +36,7 @@ workflow:
       database_url: localhost
       database_name: scholar_sample
       collection_name: stage
-    database:
+    database_in:
       database_url: localhost:27017
       database_name: scholar_colombia_2024
       collection_name: stage
