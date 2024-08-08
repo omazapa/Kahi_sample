@@ -74,7 +74,7 @@ class Kahi_scholar_sample(KahiBase):
 
     def process_products(self):
         """
-        process products given the COD_RH and COD_PRODUCTO in the workflow configuration.
+        process products given the cid or DOI in the workflow configuration.
         """
         if "products" in self.config["scholar_sample"] and self.config["scholar_sample"]["products"]:
             product_ids = []
