@@ -69,7 +69,7 @@ class Kahi_scienti_sample(KahiBase):
                     else:
                         if self.verbose > 2:
                             print(
-                                f"WARNING: Product {product_id} not found in the database {db['db'].name} collection {db["collection"].name}")
+                                f"WARNING: Product {product_id} not found in the database {db['db'].name} collection {db['collection'].name}")
 
     def process_authors(self):
         """
@@ -159,7 +159,7 @@ class Kahi_scienti_sample(KahiBase):
                 for db in self.dbs_in:
                     if self.verbose > 0:
                         print(
-                            f"INFO: Found {db['collection'].count_documents({'group': {"$elemMatch": group_id}})} in db {db['db'].name} collection {db['collection'].name} for id   {group_id}")
+                            f"INFO: Found {db['collection'].count_documents({'group': {'$elemMatch': group_id}})} in db {db['db'].name} collection {db['collection'].name} for id {group_id}")
                     works = db["collection"].find(
                         {'group': {"$elemMatch": group_id}})
                     Parallel(n_jobs=self.num_jobs, backend="threading", verbose=10)(
@@ -185,7 +185,7 @@ class Kahi_scienti_sample(KahiBase):
                 for db in self.dbs_in:
                     if self.verbose > 0:
                         print(
-                            f"INFO: Found {db['collection'].count_documents({'institution': {"$elemMatch": institution_id}})} in db {db['db'].name} collection {db['collection'].name} for id   {institution_id}")
+                            f"INFO: Found {db['collection'].count_documents({'institution': {'$elemMatch': institution_id}})} in db {db['db'].name} collection {db['collection'].name} for id {institution_id}")  # noqa: E501
                     works = db["collection"].find(
                         {'institution': {"$elemMatch": institution_id}})
                     Parallel(n_jobs=self.num_jobs, backend="threading", verbose=10)(
