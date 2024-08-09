@@ -85,7 +85,7 @@ class Kahi_openalex_sample(KahiBase):
                     raise Exception("Invalid author id: ", author_id)
                 if self.verbose > 0:
                     print(
-                        f"INFO: Found {self.collection_in.count_documents({"authorships.author.id": author_id})} in db {self.db_in.name} collection {self.collection_in.name} for id   {author_id}")
+                        f"INFO: Found {self.collection_in.count_documents({'authorships.author.id': author_id})} in db {self.db_in.name} collection {self.collection_in.name} for id   {author_id}")
                 works = self.collection_in.find(
                     {"authorships.author.id": author_id})
                 Parallel(n_jobs=self.num_jobs, backend="threading", verbose=10)(
@@ -148,7 +148,7 @@ class Kahi_openalex_sample(KahiBase):
                     raise Exception("Invalid institution id: ", institution_id)
                 if self.verbose > 0:
                     print(
-                        f"INFO: Found {self.collection_in.count_documents({'authorships.institutions.id': institution_id})} in db {self.db_in.name} collection {self.collection_in.name} for id   {institution_id}")
+                        f"INFO: Found {self.collection_in.count_documents({'authorships.institutions.id': institution_id})} in db {self.db_in.name} collection {self.collection_in.name} for id   {institution_id}")  # noqa
                 works = self.collection_in.find(
                     {'authorships.institutions.id': institution_id})
                 Parallel(n_jobs=self.num_jobs, backend="threading", verbose=10)(

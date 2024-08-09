@@ -58,7 +58,7 @@ class Kahi_minciencias_sample(KahiBase):
             for author_id in author_ids:
                 if self.verbose > 0:
                     print(
-                        f"INFO: Found {self.cols_in["gruplac_production"].count_documents({'id_persona_pd': author_id})} in db {self.db_in.name} collection {self.cols_in["gruplac_production"].name} for id   {author_id}")
+                        f"INFO: Found {self.cols_in['gruplac_production'].count_documents({'id_persona_pd': author_id})} in db {self.db_in.name} collection {self.cols_in['gruplac_production'].name} for id   {author_id}")  # noqa: E501
                 works = self.cols_in["gruplac_production"].find(
                     {"id_persona_pd": author_id})
                 Parallel(n_jobs=self.num_jobs, backend="threading", verbose=10)(
@@ -75,7 +75,7 @@ class Kahi_minciencias_sample(KahiBase):
         else:
             if self.verbose > 2:
                 print(
-                    f"INFO: Work  {work_id} already exists in db {self.db_out.name} collection {self.cols_out["gruplac_production"].name} ")
+                    f"INFO: Work {work_id} already exists in db {self.db_out.name} collection {self.cols_out['gruplac_production'].name}")
 
     def process_products(self):
         """
@@ -101,7 +101,7 @@ class Kahi_minciencias_sample(KahiBase):
                     else:
                         if self.verbose > 2:
                             print(
-                                f"INFO: Product {product_id.pattern} already exists in db {self.db_out.name} collection {self.cols_out["gruplac_production_data"].name}")
+                                f"INFO: Product {product_id.pattern} already exists in db {self.db_out.name} collection {self.cols_out['gruplac_production_data'].name}")
                 print(
                     f"INFO: Found {found} works for product {product_id.pattern}")
             print(f"INFO: Found {total_found} works in total")
@@ -117,7 +117,7 @@ class Kahi_minciencias_sample(KahiBase):
             for group_id in group_ids:
                 if self.verbose > 0:
                     print(
-                        f"INFO: Found {self.cols_in["gruplac_production"].count_documents({'cod_grupo_gr': group_id})} in db {self.db_in.name} collection {self.cols_in["gruplac_production"].name} for id   {group_id}")
+                        f"INFO: Found {self.cols_in['gruplac_production'].count_documents({'cod_grupo_gr': group_id})} in db {self.db_in.name} collection {self.cols_in['gruplac_production'].name} for id {group_id}")  # noqa: E501
                 works = self.cols_in["gruplac_production"].find(
                     {"cod_grupo_gr": group_id})
                 Parallel(n_jobs=self.num_jobs, backend="threading", verbose=10)(
@@ -137,7 +137,7 @@ class Kahi_minciencias_sample(KahiBase):
             for category_id in category_ids:
                 if self.verbose > 0:
                     print(
-                        f"INFO: Found {self.cols_in["gruplac_production"].count_documents({'id_tipo_pd_med': category_id})} in db {self.db_in.name} collection {self.cols_in["gruplac_production"].name} for id   {category_id.pattern}")
+                        f"INFO: Found {self.cols_in['gruplac_production'].count_documents({'id_tipo_pd_med': category_id})} in db {self.db_in.name} collection {self.cols_in['gruplac_production'].name} for id {category_id.pattern}")  # noqa: E501
                 works = self.cols_in["gruplac_production"].find(
                     {"id_tipo_pd_med": category_id})
                 Parallel(n_jobs=self.num_jobs, backend="threading", verbose=10)(
@@ -154,7 +154,7 @@ class Kahi_minciencias_sample(KahiBase):
             for query in queries:
                 if self.verbose > 0:
                     print(
-                        f"INFO: Found {self.cols_in["gruplac_production"].count_documents(query)} in db {self.db_in.name} collection {self.cols_in["gruplac_production"].name} for query   {query}")
+                        f"INFO: Found {self.cols_in['gruplac_production'].count_documents(query)} in db {self.db_in.name} collection {self.cols_in['gruplac_production'].name} for query {query}")
                 works = self.cols_in["gruplac_production"].find(query)
                 Parallel(n_jobs=self.num_jobs, backend="threading", verbose=10)(
                     delayed(self.process_one_work)(work) for work in works)
@@ -190,10 +190,10 @@ class Kahi_minciencias_sample(KahiBase):
                 else:
                     if self.verbose > 2:
                         print(
-                            f"INFO: Profile {person_id} already exists in db {self.db_out.name} collection {self.cols_out["cvlac_stage"].name} ")
+                            f"INFO: Profile {person_id} already exists in db {self.db_out.name} collection {self.cols_out['cvlac_stage'].name}")
             else:
                 print(
-                    f"INFO: Profile {person_id} not found in cvlac_stage, looking in {self.cols_out["cvlac_stage_private"].name}")
+                    f"INFO: Profile {person_id} not found in cvlac_stage, looking in {self.cols_out['cvlac_stage_private'].name}")
 
                 profile = self.cols_in["cvlac_stage_private"].find_one(
                     {"id_persona_pr": person_id})
@@ -204,7 +204,7 @@ class Kahi_minciencias_sample(KahiBase):
                     else:
                         if self.verbose > 2:
                             print(
-                                f"INFO: Profile {person_id} already exists in db {self.db_out.name} collection {self.cols_out["cvlac_stage_private"].name} ")
+                                f"INFO: Profile {person_id} already exists in db {self.db_out.name} collection {self.cols_out['cvlac_stage_private'].name}")
                 else:
                     print(
                         f"INFO: Profile {person_id} not found in cvlac_stage_private.")
@@ -217,7 +217,7 @@ class Kahi_minciencias_sample(KahiBase):
             "cod_grupo_gr")
         if self.verbose > 0:
             print(
-                f"INFO: Processing gruplac groups, found {len(group_ids)} unique groups ")
+                f"INFO: Processing gruplac groups, found {len(group_ids)} unique groups")
         for group_id in group_ids:
             group = self.cols_in["gruplac_groups"].find_one(
                 {"cod_grupo_gr": group_id})
@@ -227,7 +227,7 @@ class Kahi_minciencias_sample(KahiBase):
                 else:
                     if self.verbose > 2:
                         print(
-                            f"INFO: Group {group_id} already exists in db {self.db_out.name} collection {self.cols_out["gruplac_groups"].name} ")
+                            f"INFO: Group {group_id} already exists in db {self.db_out.name} collection {self.cols_out['gruplac_groups'].name}")
             else:
                 print(f"INFO: Group {group_id} not found in gruplac_groups.")
 
