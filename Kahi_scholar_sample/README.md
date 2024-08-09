@@ -57,6 +57,18 @@ workflow:
       - 'misc'
       - 'phdthesis'
       - 'techreport'
+    custom_queries: # you have to build the mongodb query and it have to return always works
+      - {"year": {"$gte": "2018", "$lte": "2020"}, "cites": {"$gt": 5}} # Products published between 2018 and 2020 with more than 5 citations
+    custom_pipelines: # you have to build the mongodb pipeline and it have to return always works
+      - [
+          {
+            "$match": {
+                "publisher": "Elsevier",
+                "year": "2019",
+                "cites": {"$gte": 5}
+            }
+          }
+      ] # Products published by "Elsevier" in 2019 with at least 5 citations
 ```
 
 

@@ -65,7 +65,7 @@ class Kahi_scholar_sample(KahiBase):
                 pipeline = [
                     {'$match': {
                         '$expr': {'$gt': [{'$size': {'$filter': {'input': {'$objectToArray': '$profiles'}, 'as': 'profile', 'cond': {'$eq': ['$$profile.v', author_id]}}}}, 0]}}}]
-                works = list(self.col_in.aggregate(pipeline))
+                works = list(self.col_in.aggregate(pipeline, allowDiskUse=True))
                 if self.verbose > 0:
                     print(
                         f"INFO: Found {len(works)} works in db {self.db_in.name} collection {self.col_in.name} for id {author_id}")
@@ -109,8 +109,42 @@ class Kahi_scholar_sample(KahiBase):
                     Parallel(n_jobs=self.num_jobs, backend="threading", verbose=10)(
                         delayed(self.process_one_work)(work) for work in works)
 
+    def process_custom_queries(self):
+        """
+        Process custom queries in the workflow configuration.
+        """
+        if "custom_queries" in self.config["scholar_sample"] and self.config["scholar_sample"]["custom_queries"]:
+            queries = self.config["scholar_sample"]["custom_queries"]
+            if self.verbose > 0:
+                print("INFO: Processing custom queries: ", len(queries))
+            for query in queries:
+                if self.verbose > 0:
+                    print(
+                        f"INFO: Found {self.col_in.count_documents(query)} in db {self.db_in.name} collection {self.col_in.name} for query {query}")
+                works = self.col_in.find(query)
+                Parallel(n_jobs=self.num_jobs, backend="threading", verbose=10)(
+                    delayed(self.process_one_work)(work) for work in works)
+
+    def process_custom_pipelines(self):
+        """
+        Process custom pipelines in the workflow configuration.
+        """
+        if "custom_pipelines" in self.config["scholar_sample"] and self.config["scholar_sample"]["custom_pipelines"]:
+            pipelines = self.config["scholar_sample"]["custom_pipelines"]
+            if self.verbose > 0:
+                print("INFO: Processing custom pipelines: ", len(pipelines))
+            for pipeline in pipelines:
+                works = list(self.col_in.aggregate(pipeline))
+                if self.verbose > 0:
+                    print(
+                        f"INFO: Found {len(works)} in db {self.db_in.name} collection {self.col_in.name} for pipeline {pipeline}")
+                Parallel(n_jobs=self.num_jobs, backend="threading", verbose=10)(
+                    delayed(self.process_one_work)(work) for work in works)
+
     def run(self):
         self.process_authors()
         self.process_products()
         self.process_types()
+        self.process_custom_queries()
+        self.process_custom_pipelines()
         return 0
