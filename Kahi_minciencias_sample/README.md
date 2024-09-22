@@ -49,6 +49,7 @@ workflow:
       - gruplac_groups: gruplac_groups_data
       - cvlac_stage: cvlac_stage
       - cvlac_stage_private: cvlac_stage_private
+      - cvlac_data: cvlac_data
     database_in:
       database_url: localhost:27017
       database_name: yuku
@@ -57,6 +58,7 @@ workflow:
       - gruplac_groups: gruplac_groups_data
       - cvlac_stage: cvlac_stage
       - cvlac_stage_private: cvlac_stage_private
+      - cvlac_data: cvlac_data
     authors: 
       - "0000177733" # Diego Restrepo
       - "0001385569" # Claudia Marcela Velez

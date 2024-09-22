@@ -68,6 +68,11 @@ class Kahi_minciencias_sample(KahiBase):
         """
         Method to process one work and save it in the output database.
         Required for parallel processing.
+
+        Parameters:
+        ----------
+        work: dict
+            A dictionary with the work to process.
         """
         work_id = {"id_producto_pd": work["id_producto_pd"]}
         if self.cols_out["gruplac_production"].count_documents(work_id) == 0:
@@ -231,6 +236,31 @@ class Kahi_minciencias_sample(KahiBase):
             else:
                 print(f"INFO: Group {group_id} not found in gruplac_groups.")
 
+    def process_cvlac_data(self):
+        """
+        Process cvlac data in the workflow configuration taking the person ids from the gruplac_production collection.
+        """
+        person_ids = self.cols_out["gruplac_production"].distinct(
+            "id_persona_pd")
+        if self.verbose > 0:
+            print(
+                f"INFO: Processing cvlac data, found {len(person_ids)} unique persons: ")
+
+        for person_id in person_ids:
+            profile = self.cols_in["cvlac_data"].find_one(
+                {"id_persona_pr": person_id})
+            print(profile)
+            if profile:
+                if self.cols_out["cvlac_data"].count_documents({"id_persona_pr": person_id}) == 0:
+                    self.cols_out["cvlac_data"].insert_one(profile)
+                else:
+                    if self.verbose > 2:
+                        print(
+                            f"INFO: Profile {person_id} already exists in db {self.db_out.name} collection {self.cols_out['cvlac_data'].name}")
+            else:
+                print(
+                    f"INFO: Profile {person_id} not found in cvlac_data")
+
     def run(self):
         self.process_authors()
         self.process_products()
@@ -240,4 +270,5 @@ class Kahi_minciencias_sample(KahiBase):
         self.process_custom_pipelines()
         self.process_cvlac_stage()
         self.process_gruplac_groups()
+        self.process_cvlac_data()
         return 0
