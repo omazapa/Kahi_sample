@@ -249,7 +249,6 @@ class Kahi_minciencias_sample(KahiBase):
         for person_id in person_ids:
             profile = self.cols_in["cvlac_data"].find_one(
                 {"id_persona_pr": person_id})
-            print(profile)
             if profile:
                 if self.cols_out["cvlac_data"].count_documents({"id_persona_pr": person_id}) == 0:
                     self.cols_out["cvlac_data"].insert_one(profile)
